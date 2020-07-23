@@ -18,6 +18,12 @@ public class Login extends AppCompatActivity {
     public void login(View view) {
 
         /***/
+        if(code==2)
+        {
+            Intent intent = new Intent(getApplicationContext(), FacultyHome.class);
+            intent.putExtra("code", code);
+            startActivity(intent);
+        }
     }
 
     public void signup(View view) {
