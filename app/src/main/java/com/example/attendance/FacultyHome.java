@@ -36,7 +36,11 @@ public class FacultyHome extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-            case R.id.addNewCourse : /**/ break;
+            case R.id.addNewCourse : {
+                Intent intent = new Intent(getApplicationContext(), CreateNewCourse.class);
+                startActivity(intent);
+                break;
+            }
 
             case R.id.help: /**/ break;
 

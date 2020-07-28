@@ -13,6 +13,9 @@ public class FacultyCourse extends AppCompatActivity {
 
     public void attendance(View view) {
 
+        Intent intent = new Intent(getApplicationContext(), TakeAttendace.class);
+        startActivity(intent);
+
         /**/
     }
 
