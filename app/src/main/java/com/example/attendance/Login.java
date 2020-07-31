@@ -24,6 +24,12 @@ public class Login extends AppCompatActivity {
             intent.putExtra("code", code);
             startActivity(intent);
         }
+        else {
+
+            Intent intent = new Intent(getApplicationContext(), StudentHome.class);
+            intent.putExtra("code", code);
+            startActivity(intent);
+        }
     }
 
     public void signup(View view) {
