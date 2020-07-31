@@ -61,8 +61,8 @@ public class FacultyHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faculty_home);
 
-        welcomeTextView = (TextView) findViewById(R.id.welcomeTextView);
-        courseListView = (ListView) findViewById(R.id.courseListView);
+        welcomeTextView = (TextView) findViewById(R.id.welcomeTextView2);
+        courseListView = (ListView) findViewById(R.id.courseListView2);
 
         ArrayList<String> courseName = new ArrayList<String>();
 

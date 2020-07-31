@@ -29,7 +29,7 @@ import android.widget.Toast;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_course);
 
-        courseNameTextView = (EditText) findViewById(R.id.courseNameTextView);
-        batchTextView = (EditText) findViewById(R.id.batchTextView);
+        courseNameTextView = (EditText) findViewById(R.id.courseNameTextView2);
+        batchTextView = (EditText) findViewById(R.id.batchTextView2);
     }
 }

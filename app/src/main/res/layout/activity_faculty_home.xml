@@ -7,7 +7,7 @@
     tools:context=".FacultyHome">
 
     <TextView
-        android:id="@+id/welcomeTextView"
+        android:id="@+id/welcomeTextView2"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="8dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
-        android:id="@+id/courseListView"
+        android:id="@+id/courseListView2"
         android:layout_width="305dp"
         android:layout_height="495dp"
         android:layout_marginStart="16dp"
@@ -32,6 +32,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeTextView2"
         app:layout_constraintVertical_bias="0.047" />
 </androidx.constraintlayout.widget.ConstraintLayout>

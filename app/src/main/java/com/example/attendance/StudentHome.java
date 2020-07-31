@@ -37,8 +37,8 @@ public class StudentHome extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.joinNewCourse : {
-//                Intent intent = new Intent(getApplicationContext(), CreateNewCourse.class);
-//                startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), JoinNewCourse.class);
+                startActivity(intent);
                 break;
             }
 
@@ -62,8 +62,8 @@ public class StudentHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_home);
 
-        welcomeTextView = (TextView) findViewById(R.id.welcomeTextView);
-        courseListView = (ListView) findViewById(R.id.courseListView);
+        welcomeTextView = (TextView) findViewById(R.id.welcomeTextView2);
+        courseListView = (ListView) findViewById(R.id.courseListView2);
 
         ArrayList<String> courseName = new ArrayList<String>();
 
@@ -79,7 +79,7 @@ public class StudentHome extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Intent intent = new Intent(getApplicationContext(), FacultyCourse.class);
+                Intent intent = new Intent(getApplicationContext(), StudentCourse.class);
                 startActivity(intent);
 
             }
