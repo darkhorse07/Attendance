@@ -25,7 +25,7 @@ public class TakeAttendace extends AppCompatActivity {
     EditText codeTextView;
     ImageView qrCodeImageView;
     Button generateButton;
-    Button scanButton;
+    //Button scanButton;
 
     public void generate(View view) {
 
@@ -48,6 +48,7 @@ public class TakeAttendace extends AppCompatActivity {
         }
     }
 
+    /*
     public void scan(View view) {
 
         IntentIntegrator intentIntegrator = new IntentIntegrator(TakeAttendace.this);
@@ -59,7 +60,7 @@ public class TakeAttendace extends AppCompatActivity {
         intentIntegrator.setBarcodeImageEnabled(true);
         intentIntegrator.initiateScan();
 
-    }
+    } */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +70,10 @@ public class TakeAttendace extends AppCompatActivity {
         codeTextView = (EditText) findViewById(R.id.codeTextView);
         qrCodeImageView = (ImageView) findViewById(R.id.qrCodeImageView);
         generateButton = (Button) findViewById(R.id.generateButton);
-        scanButton = (Button) findViewById(R.id.scanButton);
+        //scanButton = (Button) findViewById(R.id.scanButton);
 
     }
-
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -84,5 +85,5 @@ public class TakeAttendace extends AppCompatActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
+    }*/
 }
