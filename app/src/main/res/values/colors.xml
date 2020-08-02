@@ -6,6 +6,7 @@
     <color name="dark">#222831</color>
     <color name="semiDark">#393e46</color>
     <color name="light">#eeeeee</color>
-    <color name="neon">#e97171</color>
+    <color name="neon">#df5e88</color>
+    <color name="background">#ebecf1</color>
 
 </resources>

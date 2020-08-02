@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             String text = getString(R.string.about_MarkME);
             Spanned styledText = Html.fromHtml(text, FROM_HTML_MODE_LEGACY);
             aboutTextView.setText(styledText);
-            aboutTextView.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
+//            aboutTextView.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
 
         }
     }
