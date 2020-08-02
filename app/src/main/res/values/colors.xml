@@ -3,4 +3,9 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="dark">#222831</color>
+    <color name="semiDark">#393e46</color>
+    <color name="light">#eeeeee</color>
+    <color name="neon">#e97171</color>
+
 </resources>

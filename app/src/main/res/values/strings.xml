@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">Attendance</string>
+    <string name="app_name">MarkME</string>
+    <string name="about_MarkME">
+        &lt;font color="#e97171"> &lt;b> MarkME &lt;/font> &lt;/b> is an android based application developed primarily for students and faculty members.
+        It helps the faculty members to digitally mark the attendance and keep a track of previous records.
+        It lists out the students who have attendance below a certain number.
+        &lt;br>
+        Students, on the other hand, can check out his/her attendance record through this application.
+
+    </string>
 </resources>
