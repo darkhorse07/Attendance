@@ -29,7 +29,8 @@ public class TakeAttendace extends AppCompatActivity {
 
     public void generate(View view) {
 
-        String code = codeTextView.getText().toString();
+        //String code = codeTextView.getText().toString();
+        String code = "1234dsfwe5325";
 
         if(code!=null && code.length()>0) {
 
@@ -70,6 +71,8 @@ public class TakeAttendace extends AppCompatActivity {
         codeTextView = (EditText) findViewById(R.id.codeTextView);
         qrCodeImageView = (ImageView) findViewById(R.id.qrCodeImageView);
         generateButton = (Button) findViewById(R.id.generateButton);
+
+        codeTextView.setVisibility(View.GONE);
         //scanButton = (Button) findViewById(R.id.scanButton);
 
     }

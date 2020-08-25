@@ -18,7 +18,7 @@ import android.widget.Toast;
         /**/
         String course = courseNameTextView.getText().toString();
 
-        Toast.makeText(this, course + " added successfully!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, course + " created successfully!", Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(getApplicationContext(), FacultyHome.class);
         startActivity(intent);

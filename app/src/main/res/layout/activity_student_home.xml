@@ -29,7 +29,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:text="Welcome,  name"
+        android:text="Welcome,  Sakshi"
         android:textColor="@color/dark"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"

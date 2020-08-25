@@ -9,24 +9,24 @@
 
     <EditText
         android:id="@+id/emailTextView"
-        android:layout_width="281dp"
+        android:layout_width="248dp"
         android:layout_height="39dp"
         android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="Email"
+        android:inputType="textEmailAddress"
         android:textColor="@color/dark"
         android:textColorHint="@color/semiDark"
-        android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/passwordTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/passwordTextView"
-        android:layout_width="281dp"
+        android:layout_width="248dp"
         android:layout_height="39dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="44dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -34,12 +34,12 @@
         android:textColorHint="@color/semiDark"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/firstNameTextView"
-        android:layout_width="281dp"
+        android:layout_width="248dp"
         android:layout_height="39dp"
         android:layout_marginBottom="20dp"
         android:ems="10"
@@ -49,43 +49,43 @@
         android:textColorHint="@color/semiDark"
         app:layout_constraintBottom_toTopOf="@+id/secondNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/secondNameTextView"
-        android:layout_width="281dp"
+        android:layout_width="248dp"
         android:layout_height="39dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="Second Name"
+        android:inputType="textPersonName"
         android:textColor="@color/dark"
         android:textColorHint="@color/semiDark"
-        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/emailTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="170dp"
+        android:layout_width="160dp"
         android:layout_height="43dp"
         android:layout_marginBottom="232dp"
-        android:onClick="register"
-        android:text="Register"
-        android:textSize="16sp"
         android:background="@color/neon"
-        android:textColor="#ffffff"
+        android:onClick="register"
         android:shadowColor="#332E2E"
         android:shadowDx="1"
         android:shadowDy="1"
         android:shadowRadius="1"
+        android:text="Register"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

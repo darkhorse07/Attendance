@@ -15,7 +15,7 @@ public class JoinNewCourse extends AppCompatActivity {
     public void joinCourse(View view) {
 
         String courseId = courseIdTextView.getText().toString();
-        Toast.makeText(this, courseId + " added successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Course added successfully!", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(getApplicationContext(), StudentHome.class);
         startActivity(intent);

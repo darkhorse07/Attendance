@@ -8,20 +8,38 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/c"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/c"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StudentCourse"></activity>
-        <activity android:name=".JoinNewCourse" />
-        <activity android:name=".StudentHome" />
-        <activity android:name=".TakeAttendace" />
-        <activity android:name=".CreateNewCourse" />
-        <activity android:name=".FacultyCourse" />
-        <activity android:name=".FacultyHome" />
-        <activity android:name=".SignUp" />
-        <activity android:name=".Login" />
+        <activity
+            android:name=".StudentCourse"
+            android:label="Course" />
+        <activity
+            android:name=".JoinNewCourse"
+            android:label="Join A New Course" />
+        <activity
+            android:name=".StudentHome"
+            android:label="Student Home"/>
+        <activity
+            android:name=".TakeAttendace"
+            android:label="Take Attendance"/>
+        <activity
+            android:name=".CreateNewCourse"
+            android:label="Create A New Course"/>
+        <activity
+            android:name=".FacultyCourse"
+            android:label="Course"/>
+        <activity
+            android:name=".FacultyHome"
+            android:label="Faculty Home"/>
+        <activity
+            android:name=".SignUp"
+            android:label="Register"/>
+        <activity
+            android:name=".Login"
+            android:label="Login"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

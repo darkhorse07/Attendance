@@ -66,8 +66,8 @@ public class FacultyHome extends AppCompatActivity {
 
         ArrayList<String> courseName = new ArrayList<String>();
 
-        courseName.add("Maths II");
-        courseName.add("AI");
+        courseName.add("DMBS");
+        courseName.add("DS");
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, courseName);
 
