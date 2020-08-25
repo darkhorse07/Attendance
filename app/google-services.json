@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "707309632118",
+    "firebase_url": "https://markme-75c67.firebaseio.com",
+    "project_id": "markme-75c67",
+    "storage_bucket": "markme-75c67.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707309632118:android:3555dbd4efb3c812cb3d57",
+        "android_client_info": {
+          "package_name": "com.example.attendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707309632118-j0s44s2fpem5evv91psbbjiao9vv0kb6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9Gd3sWv2v9CLhMYR55lgV4uto9UY0qJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707309632118-j0s44s2fpem5evv91psbbjiao9vv0kb6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
