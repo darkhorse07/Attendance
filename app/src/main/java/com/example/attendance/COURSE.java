@@ -29,6 +29,7 @@ public class COURSE {
         this.lng = lng;
         this.currentDate = currentDate;
         this.totalDates = totalDates;
+        totalDates.add(new Date(0));
     }
 
     public String getCourseId() {

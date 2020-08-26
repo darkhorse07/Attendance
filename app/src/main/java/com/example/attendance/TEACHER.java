@@ -20,6 +20,7 @@ public class TEACHER {
         this.lastName = lastName;
         this.email = email;
         this.courseId = courseId;
+        courseId.add("0");
     }
 
     public String getTeacherId() {

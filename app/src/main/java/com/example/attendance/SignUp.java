@@ -9,11 +9,13 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,10 +39,9 @@ public class SignUp extends AppCompatActivity {
 
     public void register(View view) {
 
-        final String id = databaseReference.push().getKey();
-        final String firstName = firstNameTextView.getText().toString().trim();
-        final String lastName = secondNameTextView.getText().toString().trim();
-        final String email = emailTextView.getText().toString().trim();
+        final String firstName = firstNameTextView.getText().toString();
+        final String lastName = secondNameTextView.getText().toString();
+        final String email = emailTextView.getText().toString();
         final ArrayList<String> courseID = new ArrayList<String>();
 
         String password = passwordTextView.getText().toString();
@@ -50,21 +51,25 @@ public class SignUp extends AppCompatActivity {
             firstNameTextView.requestFocus();
             return;
         }
+
         if(email.isEmpty()) {
             emailTextView.setError("Email is required!");
             emailTextView.requestFocus();
             return;
         }
+
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailTextView.setError("Please enter a valid email!");
             emailTextView.requestFocus();
             return;
         }
+
         if(password.isEmpty()) {
             passwordTextView.setError("Passport is required");
             passwordTextView.requestFocus();
             return;
         }
+
         if(password.length() < 6) {
             passwordTextView.setError("Minimum length of password should be 6");
             passwordTextView.requestFocus();
@@ -73,11 +78,13 @@ public class SignUp extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     progressBar.setVisibility(View.INVISIBLE)   ;
+                    String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     if(code == 1) {
                         STUDENT student = new STUDENT(id, firstName, lastName, email, courseID);
                         databaseReference.child(id).setValue(student);
@@ -87,9 +94,17 @@ public class SignUp extends AppCompatActivity {
                         databaseReference.child(id).setValue(teacher);
                     }
                 }
+                else {
+                    if(task.getException() instanceof FirebaseAuthUserCollisionException) {
+                        Toast.makeText(SignUp.this, "This email is already regitered!", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(SignUp.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
             }
         });
-        /**/
     }
 
     @Override
@@ -110,14 +125,11 @@ public class SignUp extends AppCompatActivity {
         code = intent.getIntExtra("code", 0);
 
         if(code == 1) {
-
             databaseReference = FirebaseDatabase.getInstance().getReference("STUDENT");
         }
         else {
-
             databaseReference = FirebaseDatabase.getInstance().getReference("TEACHER");
         }
-
 
     }
 }
