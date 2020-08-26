@@ -23,9 +23,8 @@ public class JoinNewCourse extends AppCompatActivity {
 
     EditText courseIdTextView;
     ArrayList<String> courseList;
-    ArrayList<Date> dateList;
 
-    int flag, cnt = 0;
+    int flag;
 
     String studentID;
 
@@ -70,6 +69,25 @@ public class JoinNewCourse extends AppCompatActivity {
 
         databaseAttendanceRecord.child(courseId).child(studentID).setValue(attenance_record);
 
+        databaseCourse.addValueEventListener(new ValueEventListener() { //adding course to the listview
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    COURSE course = dataSnapshot.getValue(COURSE.class);
+                    if(course.getCourseId().equals(courseId)) {
+                        StudentHome.courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                    }
+                }
+                StudentHome.arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         Toast.makeText(this, "Course added successfully!", Toast.LENGTH_SHORT).show();
 
 //        Intent intent = new Intent(getApplicationContext(), StudentHome.class);
@@ -111,7 +129,7 @@ public class JoinNewCourse extends AppCompatActivity {
             }
         });
 
-        databaseStudent.addValueEventListener(new ValueEventListener() {
+        databaseStudent.addValueEventListener(new ValueEventListener() { //student
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 

@@ -28,12 +28,12 @@ public class StudentHome extends AppCompatActivity {
     TextView welcomeTextView;
     ListView courseListView;
 
-    String studentID;
+    static String studentID;
 
     STUDENT student;
 
-    ArrayList<String> courseList = new ArrayList<String>();
-    ArrayAdapter arrayAdapter;
+    static ArrayList<String> courseList = new ArrayList<String>();
+    static ArrayAdapter arrayAdapter;
 
     DatabaseReference databaseStudent;
     DatabaseReference databaseCourse;
@@ -135,15 +135,6 @@ public class StudentHome extends AppCompatActivity {
         });
 
         Log.i("OK", "OK");
-
-
-
-//        ArrayList<String> courseName = new ArrayList<String>();
-//
-//        courseName.add("Maths II");
-//        courseName.add("AI");
-//
-
 
         courseListView.setAdapter(arrayAdapter);
 
