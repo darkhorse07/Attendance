@@ -21,6 +21,8 @@ public class StudentHome extends AppCompatActivity {
     TextView welcomeTextView;
     ListView courseListView;
 
+    String studentID;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -38,6 +40,7 @@ public class StudentHome extends AppCompatActivity {
 
             case R.id.joinNewCourse : {
                 Intent intent = new Intent(getApplicationContext(), JoinNewCourse.class);
+                intent.putExtra("id", studentID);
                 startActivity(intent);
                 break;
             }
@@ -64,6 +67,9 @@ public class StudentHome extends AppCompatActivity {
 
         welcomeTextView = (TextView) findViewById(R.id.welcomeTextView2);
         courseListView = (ListView) findViewById(R.id.courseListView2);
+
+        Intent intent = getIntent();
+        studentID = intent.getStringExtra("id");
 
         ArrayList<String> courseName = new ArrayList<String>();
 

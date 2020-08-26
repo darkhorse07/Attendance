@@ -13,6 +13,7 @@ public class ATTENANCE_RECORD {
 
     public ATTENANCE_RECORD(ArrayList<Date> presentDates) {
         this.presentDates = presentDates;
+        presentDates.add(new Date(0));
     }
 
     public ArrayList<Date> getPresentDates() {

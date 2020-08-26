@@ -14,6 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class FacultyHome extends AppCompatActivity {
@@ -22,6 +28,9 @@ public class FacultyHome extends AppCompatActivity {
     ListView courseListView;
 
     String teacherID;
+    public static TEACHER teacher;
+
+    DatabaseReference databaseTeacher;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -40,7 +49,6 @@ public class FacultyHome extends AppCompatActivity {
 
             case R.id.addNewCourse : {
                 Intent intent = new Intent(getApplicationContext(), CreateNewCourse.class);
-                intent.putExtra("id", teacherID);
                 startActivity(intent);
                 break;
             }
@@ -76,6 +84,22 @@ public class FacultyHome extends AppCompatActivity {
         courseName.add("DS");
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, courseName);
+
+        databaseTeacher = FirebaseDatabase.getInstance().getReference("TEACHER");
+        databaseTeacher.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    TEACHER tempTeacher = dataSnapshot.getValue(TEACHER.class);
+                    if(tempTeacher.getTeacherId().equals(teacherID))
+                        teacher = tempTeacher;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         courseListView.setAdapter(arrayAdapter);
 
