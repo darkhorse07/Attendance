@@ -126,8 +126,6 @@ public class JoinNewCourse extends AppCompatActivity {
 
             }
         });
-
-
     }
 }
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +14,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -23,6 +30,14 @@ public class StudentHome extends AppCompatActivity {
 
     String studentID;
 
+    STUDENT student;
+
+    ArrayList<String> courseList = new ArrayList<String>();
+    ArrayAdapter arrayAdapter;
+
+    DatabaseReference databaseStudent;
+    DatabaseReference databaseCourse;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -31,6 +46,7 @@ public class StudentHome extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -71,16 +87,67 @@ public class StudentHome extends AppCompatActivity {
         Intent intent = getIntent();
         studentID = intent.getStringExtra("id");
 
-        ArrayList<String> courseName = new ArrayList<String>();
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, courseList);
 
-        courseName.add("Maths II");
-        courseName.add("AI");
+        databaseStudent = FirebaseDatabase.getInstance().getReference("STUDENT");
+        databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE");
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, courseName);
+        databaseStudent.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot dataSnapshot :snapshot.getChildren()) {
+                    STUDENT tempStudent = dataSnapshot.getValue(STUDENT.class);
+                    if(tempStudent.getStudentId().equals(studentID))
+                        student = tempStudent;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        databaseCourse.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                courseList.clear();
+
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    COURSE course = dataSnapshot.getValue(COURSE.class);
+
+                    for(int i = 1; i < student.getCourseId().size(); i++) {
+                        if(student.getCourseId().get(i).equals(course.getCourseId())) {
+                            courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                        }
+                    }
+                }
+
+                arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        Log.i("OK", "OK");
+
+
+
+//        ArrayList<String> courseName = new ArrayList<String>();
+//
+//        courseName.add("Maths II");
+//        courseName.add("AI");
+//
+
 
         courseListView.setAdapter(arrayAdapter);
 
-        courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -89,6 +156,6 @@ public class StudentHome extends AppCompatActivity {
                 startActivity(intent);
 
             }
-        });
+        });*/
     }
 }
