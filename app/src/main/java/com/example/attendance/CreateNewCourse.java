@@ -45,27 +45,6 @@ import java.util.Date;
         FacultyHome.teacher.getCourseId().add(courseId); //updating the courses under the teacher
         databaseTeacher.setValue(FacultyHome.teacher);
 
-        /*databaseReferenceTeacher.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                    TEACHER teacher = dataSnapshot.getValue(TEACHER.class);
-
-                    if (teacherID.equals(teacher.getTeacherId()) && flag == 0) {
-                        flag = 1;
-                        teacher.getCourseId().add(id);
-                        databaseReferenceTeacher2.child("courseId").setValue(teacher.getCourseId());
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });*/
-
         Toast.makeText(CreateNewCourse.this, courseName + " created!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), FacultyHome.class);
         intent.putExtra("id", teacherID);

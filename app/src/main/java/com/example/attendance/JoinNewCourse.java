@@ -69,31 +69,11 @@ public class JoinNewCourse extends AppCompatActivity {
 
         databaseAttendanceRecord.child(courseId).child(studentID).setValue(attenance_record);
 
-        databaseCourse.addValueEventListener(new ValueEventListener() { //adding course to the listview
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    COURSE course = dataSnapshot.getValue(COURSE.class);
-                    if(course.getCourseId().equals(courseId)) {
-                        StudentHome.courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
-                    }
-                }
-                StudentHome.arrayAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
         Toast.makeText(this, "Course added successfully!", Toast.LENGTH_SHORT).show();
 
-//        Intent intent = new Intent(getApplicationContext(), StudentHome.class);
-//        startActivity(intent);
-
-
+        Intent intent = new Intent(getApplicationContext(), StudentHome.class);
+        intent.putExtra("id", studentID);
+        startActivity(intent);
     }
 
     @Override

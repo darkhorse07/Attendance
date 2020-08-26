@@ -28,9 +28,14 @@ public class FacultyHome extends AppCompatActivity {
     ListView courseListView;
 
     String teacherID;
-    public static TEACHER teacher;
+
+    static TEACHER teacher;
+
+    static ArrayList<String> courseList = new ArrayList<String>();
+    static ArrayAdapter arrayAdapter;
 
     DatabaseReference databaseTeacher;
+    DatabaseReference databaseCourse;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,14 +83,13 @@ public class FacultyHome extends AppCompatActivity {
         Intent intent = getIntent();
         teacherID = intent.getStringExtra("id");
 
-        ArrayList<String> courseName = new ArrayList<String>();
-
-        courseName.add("DMBS");
-        courseName.add("DS");
-
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, courseName);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, courseList);
 
         databaseTeacher = FirebaseDatabase.getInstance().getReference("TEACHER");
+        databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE");
+
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, courseList);
+
         databaseTeacher.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -101,9 +105,35 @@ public class FacultyHome extends AppCompatActivity {
             }
         });
 
+        databaseCourse.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                courseList.clear();
+
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    COURSE course = dataSnapshot.getValue(COURSE.class);
+
+                    for(int i = 1; i < teacher.getCourseId().size(); i++) {
+                        if(teacher.getCourseId().get(i).equals(course.getCourseId())) {
+                            courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                        }
+                    }
+                }
+
+                arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         courseListView.setAdapter(arrayAdapter);
 
-        courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -112,7 +142,7 @@ public class FacultyHome extends AppCompatActivity {
                 startActivity(intent);
 
             }
-        });
+        });*/
 
     }
 }
