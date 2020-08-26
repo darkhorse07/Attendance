@@ -138,15 +138,17 @@ public class StudentHome extends AppCompatActivity {
 
         courseListView.setAdapter(arrayAdapter);
 
-        /*courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                String id = student.getCourseId().get(i + 1);
                 Intent intent = new Intent(getApplicationContext(), StudentCourse.class);
+                Log.i("id", id);
+                intent.putExtra("id", id);
                 startActivity(intent);
-
             }
-        });*/
+        });
     }
 }
