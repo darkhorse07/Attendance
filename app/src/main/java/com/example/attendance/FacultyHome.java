@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -133,16 +134,18 @@ public class FacultyHome extends AppCompatActivity {
 
         courseListView.setAdapter(arrayAdapter);
 
-        /*courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Intent intent = new Intent(getApplicationContext(), FacultyCourse.class);
+                Log.i("index", Integer.toString(i));
+                intent.putExtra("index", i);
                 startActivity(intent);
 
             }
-        });*/
+        });
 
     }
 }

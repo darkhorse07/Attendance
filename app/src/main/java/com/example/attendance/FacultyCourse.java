@@ -1,15 +1,31 @@
 package com.example.attendance;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class FacultyCourse extends AppCompatActivity {
 
+    int index;
+
+    TextView courseIdTextView;
+    TextView courseNameTextView;
+    TextView batchTextView;
+
+    DatabaseReference databaseCourse;
 
     public void attendance(View view) {
 
@@ -32,5 +48,38 @@ public class FacultyCourse extends AppCompatActivity {
         setContentView(R.layout.activity_faculty_course);
 
         Intent intent = getIntent();
+        index = intent.getIntExtra("index", 0) + 1;
+        Log.i("index2", Integer.toString(index));
+
+        courseIdTextView = (TextView) findViewById(R.id.courseIDTextView);
+        courseNameTextView = (TextView) findViewById(R.id.courseNameTextView2);
+        batchTextView = (TextView) findViewById(R.id.batchTextView2);
+
+        databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE");
+        databaseCourse.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    COURSE course = dataSnapshot.getValue(COURSE.class);
+
+                    if(course.getCourseId().equals(FacultyHome.teacher.getCourseId().get(index))) {
+                        courseIdTextView.setText("Course Id: " + course.getCourseId());
+                        courseNameTextView.setText("Course Name: " + course.getCourseName());
+                        batchTextView.setText("Batch: " + course.getBatch());
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
     }
 }
