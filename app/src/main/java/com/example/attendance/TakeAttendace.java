@@ -49,10 +49,14 @@ public class TakeAttendace extends AppCompatActivity {
     String courseId;
     COURSE course;
 
+    int cnt = 1;
+
     DatabaseReference databaseCourse;
 
     LocationManager locationManager;
     LocationListener locationListener;
+
+    CountDownTimer countDownTimer;
 
     LatLng currLatLng = new LatLng(0,0);
     LatLng lastKnowLocationLatLng = new LatLng(0,0);
@@ -139,18 +143,27 @@ public class TakeAttendace extends AppCompatActivity {
 
     public void generate(View view) {
 
-        course.setCurrentDate(new Date());
-        course.getTotalDates().add(new Date());
+        if(cnt == 1) {
+            course.setCurrentDate(new Date());
+            course.getTotalDates().add(new Date());
+            cnt++;
+        }
 
+        generateButton.setClickable(false);
+        generateButton.setEnabled(false);
+        generateButton.setVisibility(View.INVISIBLE);
+
+        stopButton.setClickable(true);
+        stopButton.setEnabled(true);
+        stopButton.setVisibility(View.VISIBLE);
 
         Log.i("CLICKED", "!");
-        CountDownTimer countDownTimer = new CountDownTimer(15000, 5000) {
+        countDownTimer = new CountDownTimer(50000, 8000) {
             @Override
             public void onTick(long l) {
                 Log.i("Inside", "Timer");
                 generateCode();
             }
-
             @Override
             public void onFinish() {
                 start();
@@ -158,8 +171,25 @@ public class TakeAttendace extends AppCompatActivity {
         }.start();
     }
 
-
     public void stop(View view) {
+
+        stopButton.setClickable(false);
+        stopButton.setEnabled(false);
+        stopButton.setVisibility(View.INVISIBLE);
+
+        generateButton.setClickable(true);
+        generateButton.setEnabled(true);
+        generateButton.setVisibility(View.VISIBLE);
+
+        countDownTimer.cancel();
+        course.setLat(0);
+        course.setLng(0);
+        course.setQRCode("0");
+
+        qrCodeImageView.setVisibility(View.INVISIBLE);
+
+        databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE").child(courseId);
+        databaseCourse.setValue(course);
 
     }
 
@@ -168,11 +198,15 @@ public class TakeAttendace extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_attendace);
 
+        cnt = 1;
+
         qrCodeImageView = (ImageView) findViewById(R.id.qrCodeImageView);
         generateButton = (Button) findViewById(R.id.generateButton);
         stopButton = (Button) findViewById(R.id.stopButton);
 
+        stopButton.setVisibility(View.INVISIBLE);
         stopButton.setClickable(false);
+        stopButton.setEnabled(false);
 
         Intent intent = getIntent();
         courseId = intent.getStringExtra("courseId");
