@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FacultyCourse extends AppCompatActivity {
 
-    int index;
+    String courseId;
 
     TextView courseIdTextView;
     TextView courseNameTextView;
@@ -48,8 +48,7 @@ public class FacultyCourse extends AppCompatActivity {
         setContentView(R.layout.activity_faculty_course);
 
         Intent intent = getIntent();
-        index = intent.getIntExtra("index", 0) + 1;
-        Log.i("index2", Integer.toString(index));
+        courseId = intent.getStringExtra("id");
 
         courseIdTextView = (TextView) findViewById(R.id.courseIDTextView);
         courseNameTextView = (TextView) findViewById(R.id.courseNameTextView2);
@@ -64,7 +63,7 @@ public class FacultyCourse extends AppCompatActivity {
 
                     COURSE course = dataSnapshot.getValue(COURSE.class);
 
-                    if(course.getCourseId().equals(FacultyHome.teacher.getCourseId().get(index))) {
+                    if(course.getCourseId().equals(courseId)) {
                         courseIdTextView.setText("Course Id: " + course.getCourseId());
                         courseNameTextView.setText("Course Name: " + course.getCourseName());
                         batchTextView.setText("Batch: " + course.getBatch());
@@ -78,8 +77,5 @@ public class FacultyCourse extends AppCompatActivity {
 
             }
         });
-
-
-
     }
 }

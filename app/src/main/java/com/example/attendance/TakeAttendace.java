@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,17 +22,18 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.UUID;
+
 public class TakeAttendace extends AppCompatActivity {
 
-    EditText codeTextView;
     ImageView qrCodeImageView;
     Button generateButton;
-    //Button scanButton;
+    Button stopButton;
 
-    public void generate(View view) {
+    public void generateCode() {
 
-        //String code = codeTextView.getText().toString();
-        String code = "1234dsfwe5325";
+        String code = UUID.randomUUID().toString();
+        Log.i("CODE", code);
 
         if(code!=null && code.length()>0) {
 
@@ -47,6 +50,36 @@ public class TakeAttendace extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void generate(View view) {
+
+        //String code = codeTextView.getText().toString();
+//        generateButton.setClickable(false);
+//        stopButton.setClickable(true);
+
+        //String code = "1234dsfwe5325";
+
+
+        Log.i("CLICKED", "!");
+        CountDownTimer countDownTimer = new CountDownTimer(15000, 5000) {
+            @Override
+            public void onTick(long l) {
+                Log.i("Inside", "Timer");
+                generateCode();
+            }
+
+            @Override
+            public void onFinish() {
+                start();
+            }
+        }.start();
+
+
+    }
+
+    public void stop(View view) {
+
     }
 
     /*
@@ -68,11 +101,11 @@ public class TakeAttendace extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_attendace);
 
-        codeTextView = (EditText) findViewById(R.id.codeTextView);
         qrCodeImageView = (ImageView) findViewById(R.id.qrCodeImageView);
         generateButton = (Button) findViewById(R.id.generateButton);
+        stopButton = (Button) findViewById(R.id.stopButton);
 
-        codeTextView.setVisibility(View.GONE);
+        stopButton.setClickable(false);
         //scanButton = (Button) findViewById(R.id.scanButton);
 
     }

@@ -139,9 +139,10 @@ public class FacultyHome extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                String id = teacher.getCourseId().get(i + 1);
                 Intent intent = new Intent(getApplicationContext(), FacultyCourse.class);
-                Log.i("index", Integer.toString(i));
-                intent.putExtra("index", i);
+                Log.i("id", id);
+                intent.putExtra("id", id);
                 startActivity(intent);
 
             }
