@@ -32,7 +32,10 @@ public class StudentHome extends AppCompatActivity {
 
     STUDENT student;
 
+    static COURSE currCourse;
+
     static ArrayList<String> courseList = new ArrayList<String>();
+    static ArrayList<String> courseId = new ArrayList<String>();
     static ArrayAdapter arrayAdapter;
 
     DatabaseReference databaseStudent;
@@ -113,6 +116,7 @@ public class StudentHome extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 courseList.clear();
+                courseId.clear();
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
@@ -120,7 +124,10 @@ public class StudentHome extends AppCompatActivity {
 
                     for(int i = 1; i < student.getCourseId().size(); i++) {
                         if(student.getCourseId().get(i).equals(course.getCourseId())) {
+                            //Log.i("COURSE name", course.getCourseName());
+                            //Log.i("COURSE id", course.getCourseId());
                             courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                            courseId.add(course.getCourseId());
                         }
                     }
                 }
@@ -143,9 +150,28 @@ public class StudentHome extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                String id = student.getCourseId().get(i + 1);
+                final String id = courseId.get(i);
+
+                databaseCourse.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                            COURSE temp = dataSnapshot.getValue(COURSE.class);
+                            if(temp.getCourseId().equals(id)) {
+                                currCourse = temp;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
                 Intent intent = new Intent(getApplicationContext(), StudentCourse.class);
-                Log.i("id", id);
+                //Log.i("id", id);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }

@@ -95,12 +95,7 @@ public class SignUp extends AppCompatActivity {
                     }
                 }
                 else {
-                    if(task.getException() instanceof FirebaseAuthUserCollisionException) {
-                        Toast.makeText(SignUp.this, "This email is already regitered!", Toast.LENGTH_LONG).show();
-                    }
-                    else {
                         Toast.makeText(SignUp.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                    }
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }

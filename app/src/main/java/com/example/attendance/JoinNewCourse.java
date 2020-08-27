@@ -65,9 +65,9 @@ public class JoinNewCourse extends AppCompatActivity {
         student.getCourseId().add(courseId);
         databaseStudent.child(studentID).setValue(student); // enrolled
 
-        ATTENANCE_RECORD attenance_record = new ATTENANCE_RECORD(new ArrayList<Date>());
+        ATTENANCE_RECORD attenance_record = new ATTENANCE_RECORD(new ArrayList<Date>(), studentID);
 
-        databaseAttendanceRecord.child(courseId).child(studentID).setValue(attenance_record);
+        databaseAttendanceRecord.child(courseId).child(studentID).setValue(attenance_record); // adding attendance record
 
         Toast.makeText(this, "Course added successfully!", Toast.LENGTH_SHORT).show();
 
@@ -90,7 +90,7 @@ public class JoinNewCourse extends AppCompatActivity {
 
         databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE");
         databaseStudent = FirebaseDatabase.getInstance().getReference("STUDENT");
-        databaseAttendanceRecord = FirebaseDatabase.getInstance().getReference("ATTANDANCE_RECORD");
+        databaseAttendanceRecord = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD");
 
         courseList.clear();
         databaseCourse.addValueEventListener(new ValueEventListener() { //list of courses

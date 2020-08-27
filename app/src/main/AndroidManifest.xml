@@ -4,7 +4,9 @@
     package="com.example.attendance">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="com.android.hardware.Camera.focus" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,6 +18,7 @@
         android:roundIcon="@drawable/c"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ScanAttendance"></activity>
         <activity
             android:name=".StudentCourse"
             android:label="Course" />
@@ -24,25 +27,25 @@
             android:label="Join A New Course" />
         <activity
             android:name=".StudentHome"
-            android:label="Student Home"/>
+            android:label="Student Home" />
         <activity
             android:name=".TakeAttendace"
-            android:label="Take Attendance"/>
+            android:label="Take Attendance" />
         <activity
             android:name=".CreateNewCourse"
-            android:label="Create A New Course"/>
+            android:label="Create A New Course" />
         <activity
             android:name=".FacultyCourse"
-            android:label="Course"/>
+            android:label="Course" />
         <activity
             android:name=".FacultyHome"
-            android:label="Faculty Home"/>
+            android:label="Faculty Home" />
         <activity
             android:name=".SignUp"
-            android:label="Register"/>
+            android:label="Register" />
         <activity
             android:name=".Login"
-            android:label="Login"/>
+            android:label="Login" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
