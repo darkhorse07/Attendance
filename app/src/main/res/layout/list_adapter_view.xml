@@ -10,7 +10,7 @@
         android:id="@+id/dateText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="40"
+        android:layout_weight="45"
         android:gravity="center"
         android:padding="5dp"
         android:textSize="16sp"
@@ -22,7 +22,7 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:layout_weight="64"
+        android:layout_weight="70"
         android:padding="5dp"
         android:id="@+id/presentText"
         />

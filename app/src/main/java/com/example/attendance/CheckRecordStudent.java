@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +28,8 @@ public class CheckRecordStudent extends AppCompatActivity {
     User user;
     ArrayList<User> userList;
 
+    TextView presentTextView;
+    TextView absentTextView;
     ListView recordListView;
 
     ArrayList<Date> totalClasses;
@@ -51,6 +55,8 @@ public class CheckRecordStudent extends AppCompatActivity {
         Intent intent = getIntent();
         courseId = intent.getStringExtra("courseId");
 
+        presentTextView = (TextView) findViewById(R.id.presentTextView);
+        absentTextView = (TextView) findViewById(R.id.absentTextView);
         recordListView = (ListView) findViewById(R.id.recordListView);
 
         userList = new ArrayList<>();
@@ -96,12 +102,22 @@ public class CheckRecordStudent extends AppCompatActivity {
                                 Log.i("1", totalClasses.get(i).toString());
                                 Log.i("2", attendedClasses.get(j).toString());
 
+                                String date1 = totalClasses.get(i).toString();
+                                String date2 = "";
+
+                                for(int k = 0; k < date1.length(); k++) {
+                                    if(date1.charAt(k) == 'G')
+                                        break;
+                                    else
+                                        date2 = date2 + date1.charAt(k);
+                                }
+
                                 if(j < attendedClasses.size() && totalClasses.get(i).compareTo(attendedClasses.get(j)) == 1 ) {
-                                    user = new User(totalClasses.get(i).toString(), "Present");
+                                    user = new User(date2, "Present");
                                     j++;
                                 }
                                 else {
-                                    user = new User(totalClasses.get(i).toString(), "Absent");
+                                    user = new User(date2, "Absent");
                                 }
                                 i++;
                                 userList.add(user);
@@ -111,6 +127,14 @@ public class CheckRecordStudent extends AppCompatActivity {
 
                             TwoColumn_ListAdapter adapter = new TwoColumn_ListAdapter(getApplicationContext(), R.layout.list_adapter_view, userList);
                             recordListView.setAdapter(adapter);
+
+                            int present = attendedClasses.size() - 1;
+                            int absent = totalClasses.size() - attendedClasses.size();
+
+                            presentTextView.setText("Present: " + Integer.toString(present));
+                            absentTextView.setText("Absent: " + Integer.toString(absent));
+                            presentTextView.setVisibility(View.VISIBLE);
+                            absentTextView.setVisibility(View.VISIBLE);
 
                         }
 
