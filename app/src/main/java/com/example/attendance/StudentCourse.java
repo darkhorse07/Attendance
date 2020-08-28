@@ -3,8 +3,16 @@ package com.example.attendance;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,12 +49,37 @@ public class StudentCourse extends AppCompatActivity {
     DatabaseReference databaseCourse;
     DatabaseReference databaseTeacher;
     DatabaseReference databaseAttendace;
+    DatabaseReference databaseAttendance2;
 
     IntentIntegrator intentIntegrator;
+
+    LocationManager locationManager;
+    LocationListener locationListener;
+
+    LatLng currLatLng = new LatLng(0,0);
+    LatLng lastKnowLocationLatLng = new LatLng(0,0);
 
     boolean check = false;
 
     String qrCode;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_GRANTED) {
+
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,0, locationListener);
+
+                Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                if(lastKnownLocation != null)
+                    lastKnowLocationLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+            }
+        }
+    }
 
     public void markAttendance(View view) {
 
@@ -126,6 +160,9 @@ public class StudentCourse extends AppCompatActivity {
 
             }
         });
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
     }
 
     @Override
@@ -166,7 +203,7 @@ public class StudentCourse extends AppCompatActivity {
 
                         ATTENANCE_RECORD temp = dataSnapshot.getValue(ATTENANCE_RECORD.class);
                         //Log.i("Inside", "Loop");
-                        if (temp.getStudentID().equals(StudentHome.studentID)) {
+                        if (temp.getStudentID().equals(StudentHome.studentID)) { // got the desired attendance record
 
                             attenance_record = temp;
                             //attenance_record.getPresentDates().add(course.getCurrentDate());
@@ -181,15 +218,63 @@ public class StudentCourse extends AppCompatActivity {
                                 }
                             }
 
-                            if(check == false) { //QR-Code does not match
+                            if(check == false) {
 
-                                if(currCourse.getQRCode().equals(qrCode) == false) {
+                                if(currCourse.getQRCode().equals(qrCode) == false) { // QR-Code does not match
                                     qrCode = "Invalid qrCode!";
                                     check = true;
-                                    intentIntegrator.initiateScan();
+                                    //intentIntegrator.initiateScan();
+                                }
+                                else {
+                                    locationListener = new LocationListener() { // fetching current location of the student
+                                        @Override
+                                        public void onLocationChanged(@NonNull Location location) {
 
-                                    //restart();
-                                    //markAttendance(findViewById(R.id.markAttendanceButton));
+                                            if(location != null)
+                                                currLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                        }
+                                    };
+
+                                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+                                        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                                        if(lastKnownLocation != null)
+                                            lastKnowLocationLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                                    } else {
+
+                                        ActivityCompat.requestPermissions(StudentCourse.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                                    }
+
+                                    double lat = 0;
+                                    double lng = 0;
+
+                                    if(currLatLng.longitude != 0) {
+                                        lat = currLatLng.latitude;
+                                        lng = currLatLng.longitude;
+                                    }
+                                    else if(lastKnowLocationLatLng.longitude != 0) {
+                                        lat = lastKnowLocationLatLng.latitude;
+                                        lng = lastKnowLocationLatLng.longitude;
+                                    }
+
+                                    double dist = (course.getLat() - lat)*(course.getLat() - lat) + (course.getLng() - lng)*(course.getLng() - lng);
+
+                                    if(dist > 10.0) {
+                                        qrCode = "Distance is far!";
+                                        check = true;
+                                    }
+                                    else { // Attendance is marked
+                                        qrCode = "Attendance Marked!";
+
+                                        attenance_record.getPresentDates().add(currCourse.getCurrentDate());
+
+                                        databaseAttendance2 = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseId).child(StudentHome.studentID);
+                                        databaseAttendance2.setValue(attenance_record);
+
+                                    }
                                 }
                             }
 
