@@ -36,7 +36,7 @@ public class StudentCourse extends AppCompatActivity {
     String courseId;
     String teacherId;
 
-    COURSE course;
+    static COURSE course;
     COURSE currCourse;
     ATTENANCE_RECORD attenance_record;
 
@@ -95,7 +95,11 @@ public class StudentCourse extends AppCompatActivity {
     }
 
     public void checkRecord2(View view) {
-        /**/
+
+        Intent intent = new Intent(getApplicationContext(), CheckRecordStudent.class);
+        intent.putExtra("courseId", courseId);
+        startActivity(intent);
+
     }
 
     @Override
@@ -268,7 +272,6 @@ public class StudentCourse extends AppCompatActivity {
                                     }
                                     else { // Attendance is marked
                                         qrCode = "Attendance Marked!";
-
                                         attenance_record.getPresentDates().add(currCourse.getCurrentDate());
 
                                         databaseAttendance2 = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseId).child(StudentHome.studentID);

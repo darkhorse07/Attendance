@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/c"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ScanAttendance"></activity>
+        <activity android:name=".CheckRecordStudent"></activity>
+        <activity android:name=".ScanAttendance" />
         <activity
             android:name=".StudentCourse"
             android:label="Course" />
