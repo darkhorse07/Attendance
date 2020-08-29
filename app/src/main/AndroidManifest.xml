@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CheckRecordStudent"></activity>
+        <activity android:name=".CheckRecordFaculty"></activity>
         <activity android:name=".ScanAttendance" />
         <activity
             android:name=".StudentCourse"

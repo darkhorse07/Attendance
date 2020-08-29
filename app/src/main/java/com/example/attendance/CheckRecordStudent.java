@@ -63,11 +63,11 @@ public class CheckRecordStudent extends AppCompatActivity {
 
         int numRows = StudentCourse.course.getTotalDates().size();
 
-        Log.i("Here", "Loop");
+//        Log.i("Here", "Loop");
 
         if(numRows == 1) {
             Toast.makeText(this, "No record to show!", Toast.LENGTH_LONG).show();
-            Log.i("Outside", "Loop");
+//            Log.i("Outside", "Loop");
         }
         else {
 
@@ -83,18 +83,13 @@ public class CheckRecordStudent extends AppCompatActivity {
                         Log.i("Outside Inside", "Loop");
 
                         ATTENANCE_RECORD temp = dataSnapshot.getValue(ATTENANCE_RECORD.class);
-//                        Log.i("ID1", temp.getStudentID());
-//                        Log.i("ID2", StudentHome.studentID);
+
                         if(temp != null && temp.getStudentID().equals(StudentHome.studentID)) {
 
                             attendedClasses = temp.getPresentDates();
 
-//                            sort dates arraylist
                             Collections.sort(totalClasses, new DatesComparator());
                             Collections.sort(attendedClasses, new DatesComparator());
-//                            Log.i("Inside", "Loop");
-//                            Log.i("INFO", attendedClasses.get(0).toString());
-//                            Log.i("SIZE", Integer.toString(attendedClasses.size()));
 
                             int i = 1, j = 1;
                             while(i < totalClasses.size()) { // printing record
@@ -134,7 +129,6 @@ public class CheckRecordStudent extends AppCompatActivity {
                             absentTextView.setVisibility(View.VISIBLE);
 
                         }
-
                     }
                 }
                 @Override
@@ -143,6 +137,5 @@ public class CheckRecordStudent extends AppCompatActivity {
                 }
             });
         }
-
     }
 }

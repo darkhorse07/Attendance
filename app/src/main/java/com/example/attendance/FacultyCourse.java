@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FacultyCourse extends AppCompatActivity {
 
-    String courseId;
+    static String courseId;
 
     TextView courseIdTextView;
     TextView courseNameTextView;
@@ -37,6 +37,10 @@ public class FacultyCourse extends AppCompatActivity {
     }
 
     public void checkRecord(View view) {
+
+        Intent intent = new Intent(getApplicationContext(), CheckRecordFaculty.class);
+        intent.putExtra("courseId", courseId);
+        startActivity(intent);
 
         /**/
     }
