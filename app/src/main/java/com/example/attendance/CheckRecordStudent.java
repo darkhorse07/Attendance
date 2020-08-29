@@ -85,7 +85,7 @@ public class CheckRecordStudent extends AppCompatActivity {
                         ATTENANCE_RECORD temp = dataSnapshot.getValue(ATTENANCE_RECORD.class);
 //                        Log.i("ID1", temp.getStudentID());
 //                        Log.i("ID2", StudentHome.studentID);
-                        if(temp.getStudentID().equals(StudentHome.studentID)) {
+                        if(temp != null && temp.getStudentID().equals(StudentHome.studentID)) {
 
                             attendedClasses = temp.getPresentDates();
 
@@ -98,9 +98,6 @@ public class CheckRecordStudent extends AppCompatActivity {
 
                             int i = 1, j = 1;
                             while(i < totalClasses.size()) { // printing record
-
-                                Log.i("1", totalClasses.get(i).toString());
-                                Log.i("2", attendedClasses.get(j).toString());
 
                                 String date1 = totalClasses.get(i).toString();
                                 String date2 = "";

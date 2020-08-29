@@ -61,7 +61,7 @@ public class StudentCourse extends AppCompatActivity {
 
     boolean check = false;
 
-    String qrCode;
+    String qrCode = "";
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -99,7 +99,6 @@ public class StudentCourse extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), CheckRecordStudent.class);
         intent.putExtra("courseId", courseId);
         startActivity(intent);
-
     }
 
     @Override
@@ -129,7 +128,7 @@ public class StudentCourse extends AppCompatActivity {
 
                     COURSE tempCourse = dataSnapshot.getValue(COURSE.class);
 
-                    if(tempCourse.getCourseId().equals(courseId)) {
+                    if(tempCourse != null && tempCourse.getCourseId().equals(courseId)) {
 
                         course = tempCourse;
                         courseIdTextView.setText("Course Id: " + course.getCourseId());
@@ -153,7 +152,7 @@ public class StudentCourse extends AppCompatActivity {
 
                     TEACHER teacher = dataSnapshot.getValue(TEACHER.class);
                     //Log.i("Details", teacher.toString());
-                    if(teacher.getTeacherId().equals(teacherId)) {
+                    if(teacher != null && teacher.getTeacherId().equals(teacherId)) {
                         facultyNameTextView.setText("Faculty Name: " + teacher.getFirstName() + " " + teacher.getLastName());
                     }
                 }
@@ -173,7 +172,9 @@ public class StudentCourse extends AppCompatActivity {
     protected void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
 
         final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        qrCode = result.getContents();
+        if(result!=null && result.getContents()!=null) {
+            qrCode = result.getContents();
+        }
         check = false;
 
         databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE");
@@ -185,7 +186,7 @@ public class StudentCourse extends AppCompatActivity {
 
                     COURSE tempCourse = dataSnapshot.getValue(COURSE.class);
 
-                    if(tempCourse.getCourseId().equals(courseId)) {
+                    if(tempCourse != null && tempCourse.getCourseId().equals(courseId)) {
 
                         currCourse = tempCourse;
                     }
@@ -206,16 +207,13 @@ public class StudentCourse extends AppCompatActivity {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                         ATTENANCE_RECORD temp = dataSnapshot.getValue(ATTENANCE_RECORD.class);
-                        //Log.i("Inside", "Loop");
-                        if (temp.getStudentID().equals(StudentHome.studentID)) { // got the desired attendance record
+
+                        if (temp != null && temp.getStudentID().equals(StudentHome.studentID)) { // got the desired attendance record
 
                             attenance_record = temp;
-                            //attenance_record.getPresentDates().add(course.getCurrentDate());
-                            //databaseAttendace.child(StudentHome.studentID).setValue(attenance_record);
 
                             for(int i = 1; i < attenance_record.getPresentDates().size(); i++) { // checking if the attendance is already marked
 
-                                //Log.i("SIZE", Integer.toString(attenance_record.getPresentDates().size()));
                                 if(attenance_record.getPresentDates().get(i).equals(currCourse.getCurrentDate())) { // attendance is marked
                                     qrCode = "Your attendance is already marked!";
                                     check = true;
@@ -247,7 +245,8 @@ public class StudentCourse extends AppCompatActivity {
 
                                         if(lastKnownLocation != null)
                                             lastKnowLocationLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                                    } else {
+                                    }
+                                    else {
 
                                         ActivityCompat.requestPermissions(StudentCourse.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                                     }
@@ -283,10 +282,8 @@ public class StudentCourse extends AppCompatActivity {
 
                         }
                     }
-                    if(result!=null && result.getContents()!=null) {
-                        Toast.makeText(StudentCourse.this, qrCode, Toast.LENGTH_SHORT).show();
-                    }
-
+                    Log.i("QR-Code", qrCode);
+                    Toast.makeText(StudentCourse.this, qrCode, Toast.LENGTH_LONG).show();
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -294,31 +291,7 @@ public class StudentCourse extends AppCompatActivity {
                 }
             });
 
-        Log.i("QR-Code", qrCode);
         super.onActivityResult(requestCode, resultCode, data);
-
-
-
-
-
-        /*for(int i = 1; i < attenance_record.getPresentDates().size(); i++) { // checking if the attendance is already marked
-            if(attenance_record.getPresentDates().get(i).equals(course.getCurrentDate())) {
-                Toast.makeText(this, "Attendance is already marked!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }*/
-        //Log.i("SIZE", Integer.toString(attenance_record.getPresentDates().size()));
-        //attenance_record.getPresentDates().add(course.getCurrentDate());
-        //databaseAttendace.setValue(attenance_record);
-
-        //Log.i("INFO", course.getCurrentDate().toString());
-
-        /*if(result!=null && result.getContents()!=null) {
-
-            databaseAttendace.child(StudentHome.studentID).setValue(attenance_record);
-            Toast.makeText(this, result.getContents().toString(), Toast.LENGTH_SHORT).show();
-        }*/
-
 
     }
 

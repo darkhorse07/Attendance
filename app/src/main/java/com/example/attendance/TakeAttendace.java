@@ -217,8 +217,10 @@ public class TakeAttendace extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
                     COURSE tempCourse = dataSnapshot.getValue(COURSE.class);
-                    if(tempCourse.getCourseId().equals(courseId))
+
+                    if(tempCourse != null && tempCourse.getCourseId().equals(courseId))
                         course = tempCourse;
                 }
             }

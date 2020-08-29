@@ -94,9 +94,12 @@ public class FacultyHome extends AppCompatActivity {
         databaseTeacher.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
                     TEACHER tempTeacher = dataSnapshot.getValue(TEACHER.class);
-                    if(tempTeacher.getTeacherId().equals(teacherID))
+
+                    if(tempTeacher != null && tempTeacher.getTeacherId().equals(teacherID))
                         teacher = tempTeacher;
                 }
             }
@@ -116,14 +119,16 @@ public class FacultyHome extends AppCompatActivity {
 
                     COURSE course = dataSnapshot.getValue(COURSE.class);
 
-                    for(int i = 1; i < teacher.getCourseId().size(); i++) {
-                        if(teacher.getCourseId().get(i).equals(course.getCourseId())) {
-                            courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                    if (course != null) {
+                        for (int i = 1; i < teacher.getCourseId().size(); i++) {
+                            if (teacher.getCourseId().get(i).equals(course.getCourseId())) {
+                                courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                            }
                         }
                     }
-                }
 
-                arrayAdapter.notifyDataSetChanged();
+                    arrayAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override

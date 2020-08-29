@@ -64,7 +64,7 @@ public class FacultyCourse extends AppCompatActivity {
 
                     COURSE course = dataSnapshot.getValue(COURSE.class);
 
-                    if(course.getCourseId().equals(courseId)) {
+                    if(course != null && course.getCourseId().equals(courseId)) {
                         courseIdTextView.setText("Course Id: " + course.getCourseId());
                         courseNameTextView.setText("Course Name: " + course.getCourseName());
                         batchTextView.setText("Batch: " + course.getBatch());

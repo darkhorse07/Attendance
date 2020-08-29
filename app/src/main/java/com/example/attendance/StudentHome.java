@@ -100,8 +100,10 @@ public class StudentHome extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for(DataSnapshot dataSnapshot :snapshot.getChildren()) {
+
                     STUDENT tempStudent = dataSnapshot.getValue(STUDENT.class);
-                    if(tempStudent.getStudentId().equals(studentID))
+
+                    if(tempStudent != null && tempStudent.getStudentId().equals(studentID))
                         student = tempStudent;
                 }
             }
@@ -122,17 +124,18 @@ public class StudentHome extends AppCompatActivity {
 
                     COURSE course = dataSnapshot.getValue(COURSE.class);
 
-                    for(int i = 1; i < student.getCourseId().size(); i++) {
-                        if(student.getCourseId().get(i).equals(course.getCourseId())) {
-                            //Log.i("COURSE name", course.getCourseName());
-                            //Log.i("COURSE id", course.getCourseId());
-                            courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
-                            courseId.add(course.getCourseId());
+                    if(course != null) {
+
+                        for (int i = 1; i < student.getCourseId().size(); i++) {
+                            if (student.getCourseId().get(i).equals(course.getCourseId())) {
+
+                                courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                                courseId.add(course.getCourseId());
+                            }
                         }
                     }
+                    arrayAdapter.notifyDataSetChanged();
                 }
-
-                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -159,7 +162,7 @@ public class StudentHome extends AppCompatActivity {
                         for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                             COURSE temp = dataSnapshot.getValue(COURSE.class);
-                            if(temp.getCourseId().equals(id)) {
+                            if(temp != null && temp.getCourseId().equals(id)) {
                                 currCourse = temp;
                             }
                         }

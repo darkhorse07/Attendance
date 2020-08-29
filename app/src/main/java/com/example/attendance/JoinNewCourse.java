@@ -99,7 +99,8 @@ public class JoinNewCourse extends AppCompatActivity {
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     COURSE course = dataSnapshot.getValue(COURSE.class);
-                    if(course.getCourseId() != null)
+
+                    if(course != null && course.getCourseId() != null)
                     courseList.add(course.getCourseId());
                 }
             }
@@ -114,8 +115,10 @@ public class JoinNewCourse extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
                     STUDENT tempStudent = dataSnapshot.getValue(STUDENT.class);
-                    if(tempStudent.getStudentId().equals(studentID))
+
+                    if(tempStudent != null && tempStudent.getStudentId().equals(studentID))
                         student = tempStudent;
                 }
             }
