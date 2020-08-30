@@ -75,7 +75,7 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             Intent intent;
-
+                            finish();
                             if (code == 1) {
                                 intent = new Intent(getApplicationContext(), StudentHome.class);
                             } else {
