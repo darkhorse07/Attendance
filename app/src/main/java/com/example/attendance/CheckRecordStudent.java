@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,10 @@ public class CheckRecordStudent extends AppCompatActivity {
 
     TextView presentTextView;
     TextView absentTextView;
+    TextView dateTextView;
+    TextView date2TextView;
     ListView recordListView;
+    ProgressBar progressBar;
 
     ArrayList<Date> totalClasses;
     ArrayList<Date> attendedClasses;
@@ -57,7 +61,10 @@ public class CheckRecordStudent extends AppCompatActivity {
 
         presentTextView = (TextView) findViewById(R.id.presentTextView);
         absentTextView = (TextView) findViewById(R.id.absentTextView);
+        dateTextView = (TextView) findViewById(R.id.dateTextView);
+        date2TextView = (TextView) findViewById(R.id.dateTextView2);
         recordListView = (ListView) findViewById(R.id.recordListView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar8);
 
         userList = new ArrayList<>();
 
@@ -125,6 +132,11 @@ public class CheckRecordStudent extends AppCompatActivity {
 
                             presentTextView.setText("Present: " + Integer.toString(present));
                             absentTextView.setText("Absent: " + Integer.toString(absent));
+
+                            progressBar.setVisibility(View.INVISIBLE);
+                            dateTextView.setVisibility(View.VISIBLE);
+                            date2TextView.setVisibility(View.VISIBLE);
+                            recordListView.setVisibility(View.VISIBLE);
                             presentTextView.setVisibility(View.VISIBLE);
                             absentTextView.setVisibility(View.VISIBLE);
 

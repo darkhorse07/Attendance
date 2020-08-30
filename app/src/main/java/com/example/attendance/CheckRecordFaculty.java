@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,10 @@ public class CheckRecordFaculty extends AppCompatActivity {
     Spinner studentSpinner;
     TextView presentTextView;
     TextView absentTextView;
+    TextView dateTextView;
+    TextView date2TextView;
     ListView recordListView;
+    ProgressBar progressBar;
 
     User user;
     ArrayList<User> userList;
@@ -100,6 +104,11 @@ public class CheckRecordFaculty extends AppCompatActivity {
 
         presentTextView.setText("Present: " + Integer.toString(present));
         absentTextView.setText("Absent: " + Integer.toString(absent));
+
+        progressBar.setVisibility(View.INVISIBLE);
+        dateTextView.setVisibility(View.VISIBLE);
+        date2TextView.setVisibility(View.VISIBLE);
+        recordListView.setVisibility(View.VISIBLE);
         presentTextView.setVisibility(View.VISIBLE);
         absentTextView.setVisibility(View.VISIBLE);
 
@@ -117,7 +126,10 @@ public class CheckRecordFaculty extends AppCompatActivity {
 
         presentTextView = (TextView) findViewById(R.id.presentTextView);
         absentTextView = (TextView) findViewById(R.id.absentTextView);
+        dateTextView = (TextView) findViewById(R.id.dateTextView);
+        date2TextView = (TextView) findViewById(R.id.dateTextView2);
         recordListView = (ListView) findViewById(R.id.recordListView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar7);
 
         databaseAttendance = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(FacultyCourse.courseId);
         databaseAttendance.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -188,6 +200,8 @@ public class CheckRecordFaculty extends AppCompatActivity {
                                     list.add(student_record_list.get(i).getStudentName());
                                 }
 
+                                progressBar.setVisibility(View.INVISIBLE);
+                                studentSpinner.setVisibility(View.VISIBLE);
                                 studentSpinner.setAdapter(new ArrayAdapter<>(CheckRecordFaculty.this, android.R.layout.simple_spinner_dropdown_item, list));
 
                                 studentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -199,6 +213,7 @@ public class CheckRecordFaculty extends AppCompatActivity {
                                         }
                                         else {
 //                                            String num = adapterView.getItemAtPosition(i).toString();
+                                            progressBar.setVisibility(View.VISIBLE);
                                             showSelectedRecord(i - 1);
 //                                            textView.setText(num);
                                         }
