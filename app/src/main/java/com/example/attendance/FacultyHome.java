@@ -3,8 +3,10 @@ package com.example.attendance;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +30,7 @@ public class FacultyHome extends AppCompatActivity {
 
     TextView welcomeTextView;
     ListView courseListView;
+    ProgressBar progressBar;
 
     String teacherID;
 
@@ -37,6 +41,13 @@ public class FacultyHome extends AppCompatActivity {
 
     DatabaseReference databaseTeacher;
     DatabaseReference databaseCourse;
+
+    @Override
+    public void onBackPressed() {
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(400); // vibrate the device
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,6 +91,7 @@ public class FacultyHome extends AppCompatActivity {
 
         welcomeTextView = (TextView) findViewById(R.id.welcomeTextView2);
         courseListView = (ListView) findViewById(R.id.courseListView2);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar4);
 
         Intent intent = getIntent();
         teacherID = intent.getStringExtra("id");
@@ -99,8 +111,11 @@ public class FacultyHome extends AppCompatActivity {
 
                     TEACHER tempTeacher = dataSnapshot.getValue(TEACHER.class);
 
-                    if(tempTeacher != null && tempTeacher.getTeacherId().equals(teacherID))
+                    if(tempTeacher != null && tempTeacher.getTeacherId().equals(teacherID)) {
                         teacher = tempTeacher;
+                        welcomeTextView.setText("Welcome, " + teacher.getFirstName());
+                    }
+
                 }
             }
             @Override
@@ -128,7 +143,11 @@ public class FacultyHome extends AppCompatActivity {
                     }
 
                     arrayAdapter.notifyDataSetChanged();
+
                 }
+                progressBar.setVisibility(View.INVISIBLE);
+                courseListView.setVisibility(View.VISIBLE);
+                welcomeTextView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -138,6 +157,7 @@ public class FacultyHome extends AppCompatActivity {
         });
 
         courseListView.setAdapter(arrayAdapter);
+
 
         courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import static android.text.Html.FROM_HTML_MODE_LEGACY;
-import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
+
 
 public class MainActivity extends AppCompatActivity {
 

@@ -3,8 +3,10 @@ package com.example.attendance;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +15,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +31,7 @@ public class StudentHome extends AppCompatActivity {
 
     TextView welcomeTextView;
     ListView courseListView;
+    ProgressBar progressBar;
 
     static String studentID;
 
@@ -40,6 +45,13 @@ public class StudentHome extends AppCompatActivity {
 
     DatabaseReference databaseStudent;
     DatabaseReference databaseCourse;
+
+    @Override
+    public void onBackPressed() {
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(400); // vibrate the device
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,6 +98,7 @@ public class StudentHome extends AppCompatActivity {
 
         welcomeTextView = (TextView) findViewById(R.id.welcomeTextView2);
         courseListView = (ListView) findViewById(R.id.courseListView2);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar3);
 
         Intent intent = getIntent();
         studentID = intent.getStringExtra("id");
@@ -103,8 +116,11 @@ public class StudentHome extends AppCompatActivity {
 
                     STUDENT tempStudent = dataSnapshot.getValue(STUDENT.class);
 
-                    if(tempStudent != null && tempStudent.getStudentId().equals(studentID))
+                    if(tempStudent != null && tempStudent.getStudentId().equals(studentID)) {
                         student = tempStudent;
+                        welcomeTextView.setText("Welcome, " + student.getFirstName());
+                    }
+
                 }
             }
             @Override
@@ -136,6 +152,9 @@ public class StudentHome extends AppCompatActivity {
                     }
                     arrayAdapter.notifyDataSetChanged();
                 }
+                progressBar.setVisibility(View.INVISIBLE);
+                courseListView.setVisibility(View.VISIBLE);
+                welcomeTextView.setVisibility(View.VISIBLE);
             }
 
             @Override
