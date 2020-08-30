@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,9 +42,11 @@ public class FacultyCourse extends AppCompatActivity {
 
     AlertDialog.Builder dialogBuilder;
     AlertDialog alertDialog;
+
     Spinner selectDateSpinner;
     Button cancelButton;
     Button generateQRCodeButton;
+    ProgressBar progressBar;
 
     TextView courseIdTextView;
     TextView courseNameTextView;
@@ -167,11 +170,7 @@ public class FacultyCourse extends AppCompatActivity {
                 alertDialog.dismiss();
             }
         });
-
-
-
     }
-
 
 
     @Override
@@ -185,6 +184,7 @@ public class FacultyCourse extends AppCompatActivity {
         courseIdTextView = (TextView) findViewById(R.id.courseIDTextView);
         courseNameTextView = (TextView) findViewById(R.id.courseNameTextView2);
         batchTextView = (TextView) findViewById(R.id.batchTextView2);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar6);
 
         databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE");
         databaseCourse.addValueEventListener(new ValueEventListener() {
@@ -199,6 +199,11 @@ public class FacultyCourse extends AppCompatActivity {
                         courseIdTextView.setText("Course Id: " + course.getCourseId());
                         courseNameTextView.setText("Course Name: " + course.getCourseName());
                         batchTextView.setText("Batch: " + course.getBatch());
+
+                        progressBar.setVisibility(View.INVISIBLE);
+                        courseIdTextView.setVisibility(View.VISIBLE);
+                        courseNameTextView.setVisibility(View.VISIBLE);
+                        batchTextView.setVisibility(View.VISIBLE);
                     }
 
                 }

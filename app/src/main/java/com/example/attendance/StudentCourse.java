@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class StudentCourse extends AppCompatActivity {
     TextView facultyNameTextView;
     TextView batchTextView;
     Button markAttendanceButton;
+    ProgressBar progressBar;
 
     DatabaseReference databaseCourse;
     DatabaseReference databaseTeacher;
@@ -115,6 +117,7 @@ public class StudentCourse extends AppCompatActivity {
         facultyNameTextView = (TextView) findViewById(R.id.faultyNameTextView);
         batchTextView = (TextView) findViewById(R.id.batchTextView3);
         markAttendanceButton = (Button) findViewById(R.id.markAttendanceButton);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar5);
 
         databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE");
         databaseTeacher = FirebaseDatabase.getInstance().getReference("TEACHER");
@@ -135,6 +138,32 @@ public class StudentCourse extends AppCompatActivity {
                         courseNameTextView.setText("Course Name: " + course.getCourseName());
                         batchTextView.setText("Batch: " + course.getBatch());
                         teacherId = course.getTeacherId();
+
+                        databaseTeacher.addValueEventListener(new ValueEventListener() { // displaying teacher name
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                    TEACHER teacher = dataSnapshot.getValue(TEACHER.class);
+                                    //Log.i("Details", teacher.toString());
+                                    if(teacher != null && teacher.getTeacherId().equals(teacherId)) {
+                                        facultyNameTextView.setText("Faculty Name: " + teacher.getFirstName() + " " + teacher.getLastName());
+
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        courseIdTextView.setVisibility(View.VISIBLE);
+                                        courseNameTextView.setVisibility(View.VISIBLE);
+                                        facultyNameTextView.setVisibility(View.VISIBLE);
+                                        batchTextView.setVisibility(View.VISIBLE);
+                                    }
+                                }
+
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                     }
                 }
             }
@@ -144,25 +173,6 @@ public class StudentCourse extends AppCompatActivity {
             }
         });
 
-        databaseTeacher.addValueEventListener(new ValueEventListener() { // displaying teacher name
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                    TEACHER teacher = dataSnapshot.getValue(TEACHER.class);
-                    //Log.i("Details", teacher.toString());
-                    if(teacher != null && teacher.getTeacherId().equals(teacherId)) {
-                        facultyNameTextView.setText("Faculty Name: " + teacher.getFirstName() + " " + teacher.getLastName());
-                    }
-                }
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 

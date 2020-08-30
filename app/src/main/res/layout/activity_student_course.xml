@@ -7,6 +7,21 @@
     android:background="@color/background"
     tools:context=".StudentCourse">
 
+    <ProgressBar
+        android:id="@+id/progressBar5"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="63dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="250dp"
+        android:indeterminateTint="@color/progressBar"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <Button
         android:id="@+id/button5"
         android:layout_width="170dp"
@@ -55,6 +70,8 @@
         android:text="Batch: 2018BCS"
         android:textColor="@color/dark"
         android:textSize="22sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/courseNameTextView4" />
@@ -67,6 +84,8 @@
         android:text="Batch: 2018BCS"
         android:textColor="@color/dark"
         android:textSize="22sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +99,8 @@
         android:text="Course Id: 32564"
         android:textColor="@color/dark"
         android:textSize="22sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,8 +113,10 @@
         android:layout_marginTop="28dp"
         android:layout_marginBottom="476dp"
         android:text="Course Name: Maths II"
-        android:textSize="22sp"
         android:textColor="@color/dark"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

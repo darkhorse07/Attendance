@@ -48,6 +48,7 @@
         android:text="Welcome,  Sakshi"
         android:textColor="@color/dark"
         android:textSize="36sp"
+        android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
