@@ -37,6 +37,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 
@@ -143,11 +144,24 @@ public class TakeAttendace extends AppCompatActivity {
 
     public void generate(View view) {
 
-        if(cnt == 1) {
+        /*if(cnt == 1) {
             course.setCurrentDate(new Date());
             course.getTotalDates().add(new Date());
             cnt++;
+        }*/
+
+        if(FacultyCourse.dateInd == 0) {
+            if(cnt == 1) {
+                course.setCurrentDate(new Date());
+                course.getTotalDates().add(new Date());
+                cnt++;
+            }
         }
+        else {
+            int ind = FacultyCourse.dates.size() - FacultyCourse.dateInd;
+            course.setCurrentDate(FacultyCourse.dates.get(ind));
+        }
+
 
         generateButton.setClickable(false);
         generateButton.setEnabled(false);
@@ -156,6 +170,8 @@ public class TakeAttendace extends AppCompatActivity {
         stopButton.setClickable(true);
         stopButton.setEnabled(true);
         stopButton.setVisibility(View.VISIBLE);
+
+        qrCodeImageView.setVisibility(View.VISIBLE);
 
         Log.i("CLICKED", "!");
         countDownTimer = new CountDownTimer(50000, 8000) {
