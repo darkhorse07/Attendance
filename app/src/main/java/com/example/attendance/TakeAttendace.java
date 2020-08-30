@@ -16,6 +16,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -78,6 +79,22 @@ public class TakeAttendace extends AppCompatActivity {
                     lastKnowLocationLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        onStop();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        stop(findViewById(R.id.stopButton));
+        finish();
+//        Intent intent = new Intent(getApplicationContext(), FacultyCourse.class);
+//        intent.putExtra(courseId, "id");
+//        startActivity(intent);
     }
 
     public void generateCode() {
@@ -165,16 +182,18 @@ public class TakeAttendace extends AppCompatActivity {
 
         generateButton.setClickable(false);
         generateButton.setEnabled(false);
-        generateButton.setVisibility(View.INVISIBLE);
+        generateButton.setBackgroundColor(getResources().getColor(R.color.grey));
+        //generateButton.setVisibility(View.INVISIBLE);
 
         stopButton.setClickable(true);
         stopButton.setEnabled(true);
-        stopButton.setVisibility(View.VISIBLE);
+        stopButton.setBackgroundColor(getResources().getColor(R.color.neon));
+        //stopButton.setVisibility(View.VISIBLE);
 
         qrCodeImageView.setVisibility(View.VISIBLE);
 
         Log.i("CLICKED", "!");
-        countDownTimer = new CountDownTimer(50000, 8000) {
+        countDownTimer = new CountDownTimer(50000, 5000) {
             @Override
             public void onTick(long l) {
                 Log.i("Inside", "Timer");
@@ -191,11 +210,13 @@ public class TakeAttendace extends AppCompatActivity {
 
         stopButton.setClickable(false);
         stopButton.setEnabled(false);
-        stopButton.setVisibility(View.INVISIBLE);
+        //stopButton.setVisibility(View.INVISIBLE);
+        stopButton.setBackgroundColor(getResources().getColor(R.color.grey));
 
         generateButton.setClickable(true);
         generateButton.setEnabled(true);
-        generateButton.setVisibility(View.VISIBLE);
+        generateButton.setBackgroundColor(getResources().getColor(R.color.neon));
+        //generateButton.setVisibility(View.VISIBLE);
 
         countDownTimer.cancel();
         course.setLat(0);
@@ -220,9 +241,11 @@ public class TakeAttendace extends AppCompatActivity {
         generateButton = (Button) findViewById(R.id.generateButton);
         stopButton = (Button) findViewById(R.id.stopButton);
 
-        stopButton.setVisibility(View.INVISIBLE);
-        stopButton.setClickable(false);
+        //stopButton.setVisibility(View.INVISIBLE);
+        //stopButton.setClickable(false);
         stopButton.setEnabled(false);
+        stopButton.setBackgroundColor(getResources().getColor(R.color.grey));
+
 
         Intent intent = getIntent();
         courseId = intent.getStringExtra("courseId");

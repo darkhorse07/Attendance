@@ -9,5 +9,6 @@
     <color name="neon">#df5e88</color>
     <color name="background">#ebecf1</color>
     <color name="progressBar">#16213e</color>
+    <color name="grey">#989898</color>
 
 </resources>
