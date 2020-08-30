@@ -9,6 +9,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ public class Login extends AppCompatActivity {
 
     EditText emailTextView;
     EditText passwordTextView;
+
+    ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
 
@@ -60,29 +63,35 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                    }
-                });
+        progressBar.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        progressBar.setVisibility(View.INVISIBLE);
+
                         if (task.isSuccessful()) {
+
                             Intent intent;
+
                             if (code == 1) {
                                 intent = new Intent(getApplicationContext(), StudentHome.class);
                             } else {
                                 intent = new Intent(getApplicationContext(), FacultyHome.class);
                             }
+
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("id", FirebaseAuth.getInstance().getCurrentUser().getUid());
                             Log.i("Starting", email);
+                            Toast.makeText(Login.this, "Login successful!", Toast.LENGTH_SHORT).show();
                             startActivity(intent);
+
+                        }
+                        else {
+                            Toast.makeText(Login.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
@@ -103,6 +112,7 @@ public class Login extends AppCompatActivity {
 
         emailTextView = (EditText) findViewById(R.id.emailTextView);
         passwordTextView = (EditText) findViewById(R.id.passwordTextView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar2);
 
         mAuth = FirebaseAuth.getInstance();
 
