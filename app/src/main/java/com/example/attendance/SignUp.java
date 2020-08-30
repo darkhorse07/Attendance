@@ -82,9 +82,12 @@ public class SignUp extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if(task.isSuccessful()) {
-                    progressBar.setVisibility(View.INVISIBLE)   ;
+
+                    progressBar.setVisibility(View.INVISIBLE);
                     String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
                     if(code == 1) {
                         STUDENT student = new STUDENT(id, firstName, lastName, email, courseID);
                         databaseReference.child(id).setValue(student);
@@ -93,9 +96,15 @@ public class SignUp extends AppCompatActivity {
                         TEACHER teacher = new TEACHER(id, firstName, lastName, email, courseID);
                         databaseReference.child(id).setValue(teacher);
                     }
+
+                    Toast.makeText(SignUp.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    
                 }
                 else {
-                        Toast.makeText(SignUp.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUp.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }

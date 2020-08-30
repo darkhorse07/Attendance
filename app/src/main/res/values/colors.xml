@@ -8,5 +8,6 @@
     <color name="light">#eeeeee</color>
     <color name="neon">#df5e88</color>
     <color name="background">#ebecf1</color>
+    <color name="progressBar">#16213e</color>
 
 </resources>
