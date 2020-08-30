@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -80,6 +81,7 @@ public class Login extends AppCompatActivity {
                             }
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("id", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            Log.i("Starting", email);
                             startActivity(intent);
                         }
                     }
