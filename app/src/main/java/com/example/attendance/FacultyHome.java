@@ -3,7 +3,9 @@ package com.example.attendance;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -39,6 +41,7 @@ public class FacultyHome extends AppCompatActivity {
     static TEACHER teacher;
 
     static ArrayList<String> courseList = new ArrayList<String>();
+    ArrayList<String> courseIdList = new ArrayList<String>();
     static ArrayAdapter arrayAdapter;
 
     DatabaseReference databaseTeacher;
@@ -125,6 +128,7 @@ public class FacultyHome extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                 courseList.clear();
+                                courseIdList.clear();
 
                                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
@@ -134,6 +138,7 @@ public class FacultyHome extends AppCompatActivity {
                                         for (int i = 1; i < teacher.getCourseId().size(); i++) {
                                             if (teacher.getCourseId().get(i).equals(course.getCourseId())) {
                                                 courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                                                courseIdList.add(course.getCourseId());
                                             }
                                         }
                                     }
@@ -160,7 +165,8 @@ public class FacultyHome extends AppCompatActivity {
 
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                                String id = teacher.getCourseId().get(i + 1);
+                                String id = courseIdList.get(i);
+//                                String id = teacher.getCourseId().get(i + 1);
                                 Intent intent = new Intent(getApplicationContext(), FacultyCourse.class);
                                 Log.i("id", id);
                                 intent.putExtra("id", id);
@@ -168,6 +174,99 @@ public class FacultyHome extends AppCompatActivity {
 
                             }
                         });
+
+                        courseListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                            @Override
+                            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int pos, long l) {
+
+                                final String courseIdToBeDeleted = courseIdList.get(pos);
+
+                                new AlertDialog.Builder(FacultyHome.this)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setTitle("Are you sure?")
+                                        .setMessage("All the attendance record of this course will be erased. Do you want to delete this course?")
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                                        {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                teacher.getCourseId().remove(courseIdToBeDeleted); // updating lists
+                                                courseIdList.remove(pos);
+                                                courseList.remove(pos);
+                                                arrayAdapter.notifyDataSetChanged();
+
+                                                DatabaseReference databaseTeacher = FirebaseDatabase.getInstance().getReference("TEACHER").child(teacher.getTeacherId());
+                                                databaseTeacher.setValue(teacher); // updating TEACHER->teacherid
+
+                                                DatabaseReference databaseCourse = FirebaseDatabase.getInstance().getReference("COURSE").child(courseIdToBeDeleted);
+                                                databaseCourse.removeValue(); // deleting course from COURSE
+
+                                                DatabaseReference databaseAttendance = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseIdToBeDeleted);
+                                                databaseAttendance.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                        for(DataSnapshot dataSnapshot1 : snapshot.getChildren())
+                                                        {
+
+                                                            final ATTENANCE_RECORD attenance_record = dataSnapshot1.getValue(ATTENANCE_RECORD.class);
+
+                                                            if(attenance_record != null)
+                                                            {
+
+                                                                DatabaseReference databaseStudent = FirebaseDatabase.getInstance().getReference("STUDENT");
+                                                                databaseStudent.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                                        for(DataSnapshot dataSnapshot2 : snapshot.getChildren())
+                                                                        {
+
+                                                                            STUDENT student = dataSnapshot2.getValue(STUDENT.class);
+
+                                                                            if(student != null && student.getStudentId().equals(attenance_record.getStudentID())) {
+
+                                                                                student.getCourseId().remove(courseIdToBeDeleted);
+
+                                                                                DatabaseReference databaseStudent2 = FirebaseDatabase.getInstance().getReference("STUDENT").child(student.getStudentId());
+                                                                                databaseStudent2.setValue(student);
+
+                                                                            }
+                                                                        }
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                    }
+                                                                });
+
+
+                                                            }
+                                                        }
+
+                                                        DatabaseReference databaseAttendance2 = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseIdToBeDeleted);
+                                                        databaseAttendance2.removeValue();
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+
+
+                                            }
+                                        })
+                                        .setNegativeButton("No", null)
+                                        .show();
+
+                                return true;
+                            }
+                        });
+
 
                     }
 
