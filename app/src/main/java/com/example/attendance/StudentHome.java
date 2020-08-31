@@ -128,123 +128,127 @@ public class StudentHome extends AppCompatActivity {
                     if(tempStudent != null && tempStudent.getStudentId().equals(studentID)) {
                         student = tempStudent;
                         welcomeTextView.setText("Welcome, " + student.getFirstName());
-                    }
 
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        databaseCourse.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                courseList.clear();
-                courseId.clear();
-
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                    COURSE course = dataSnapshot.getValue(COURSE.class);
-
-                    if(course != null) {
-
-                        for (int i = 1; i < student.getCourseId().size(); i++) {
-                            if (student.getCourseId().get(i).equals(course.getCourseId())) {
-
-                                courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
-                                courseId.add(course.getCourseId());
-                            }
-                        }
-                    }
-                    arrayAdapter.notifyDataSetChanged();
-                }
-                progressBar.setVisibility(View.INVISIBLE);
-                courseListView.setVisibility(View.VISIBLE);
-                welcomeTextView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        Log.i("OK", "OK");
-
-        courseListView.setAdapter(arrayAdapter);
-
-        courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                final String id = courseId.get(i);
-
-                databaseCourse.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                            COURSE temp = dataSnapshot.getValue(COURSE.class);
-                            if(temp != null && temp.getCourseId().equals(id)) {
-                                currCourse = temp;
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-                Intent intent = new Intent(getApplicationContext(), StudentCourse.class);
-                //Log.i("id", id);
-                intent.putExtra("id", id);
-                startActivity(intent);
-            }
-        });
-
-        courseListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int pos, long l) {
-
-                final String courseIdToBeDeleted = courseId.get(pos);
-
-                new AlertDialog.Builder(StudentHome.this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Are you sure?")
-                        .setMessage("All the attendance record of this course will be erased. Do you want to delete this course?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        databaseCourse.addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                DatabaseReference databaseAttendance = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseIdToBeDeleted).child(studentID);
-                                databaseAttendance.removeValue();
-                                student.getCourseId().remove(courseIdToBeDeleted);
-                                courseId.remove(courseIdToBeDeleted);
-                                courseList.remove(pos);
-                                arrayAdapter.notifyDataSetChanged();
+                                courseList.clear();
+                                courseId.clear();
 
-                                DatabaseReference databaseStudent = FirebaseDatabase.getInstance().getReference("STUDENT").child(studentID);
-                                databaseStudent.setValue(student);
+                                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                                Toast.makeText(StudentHome.this, "Course deleted successfully!", Toast.LENGTH_SHORT).show();
+                                    COURSE course = dataSnapshot.getValue(COURSE.class);
+
+                                    if(course != null) {
+
+                                        for (int i = 1; i < student.getCourseId().size(); i++) {
+                                            if (student.getCourseId().get(i).equals(course.getCourseId())) {
+
+                                                courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                                                courseId.add(course.getCourseId());
+                                            }
+                                        }
+                                    }
+                                    arrayAdapter.notifyDataSetChanged();
+                                }
+                                progressBar.setVisibility(View.INVISIBLE);
+                                courseListView.setVisibility(View.VISIBLE);
+                                welcomeTextView.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                        Log.i("OK", "OK");
+
+                        courseListView.setAdapter(arrayAdapter);
+
+                        courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                final String id = courseId.get(i);
+
+                                databaseCourse.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                        for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                            COURSE temp = dataSnapshot.getValue(COURSE.class);
+                                            if(temp != null && temp.getCourseId().equals(id)) {
+                                                currCourse = temp;
+                                            }
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                                Intent intent = new Intent(getApplicationContext(), StudentCourse.class);
+                                //Log.i("id", id);
+                                intent.putExtra("id", id);
+                                startActivity(intent);
+                            }
+                        });
+
+                        courseListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                            @Override
+                            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int pos, long l) {
+
+                                final String courseIdToBeDeleted = courseId.get(pos);
+
+                                new AlertDialog.Builder(StudentHome.this)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setTitle("Are you sure?")
+                                        .setMessage("All the attendance record of this course will be erased. Do you want to delete this course?")
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                DatabaseReference databaseAttendance = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseIdToBeDeleted).child(studentID);
+                                                databaseAttendance.removeValue();
+                                                student.getCourseId().remove(courseIdToBeDeleted);
+                                                courseId.remove(courseIdToBeDeleted);
+                                                courseList.remove(pos);
+                                                arrayAdapter.notifyDataSetChanged();
+
+                                                DatabaseReference databaseStudent = FirebaseDatabase.getInstance().getReference("STUDENT").child(studentID);
+                                                databaseStudent.setValue(student);
+
+                                                Toast.makeText(StudentHome.this, "Course deleted successfully!", Toast.LENGTH_SHORT).show();
                                 /*Intent intent = new Intent(getApplicationContext(), StudentHome.class);
                                 intent.putExtra("id", studentID);
                                 startActivity(intent);*/
 
 
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
+                                            }
+                                        })
+                                        .setNegativeButton("No", null)
+                                        .show();
 
-                return true;
+                                return true;
+                            }
+                        });
+
+
+
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
+
     }
 }

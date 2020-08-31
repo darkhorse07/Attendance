@@ -74,6 +74,9 @@ public class CheckRecordStudent extends AppCompatActivity {
 
         if(numRows == 1) {
             Toast.makeText(this, "No record to show!", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.INVISIBLE);
+            dateTextView.setVisibility(View.VISIBLE);
+            date2TextView.setVisibility(View.VISIBLE);
 //            Log.i("Outside", "Loop");
         }
         else {
