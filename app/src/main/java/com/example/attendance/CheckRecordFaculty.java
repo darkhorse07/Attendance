@@ -208,7 +208,13 @@ public class CheckRecordFaculty extends AppCompatActivity {
                                     @Override
                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                         if(i == 0) {
-                                            Toast.makeText(CheckRecordFaculty.this, "Please select a number!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(CheckRecordFaculty.this, "Please select a number!", Toast.LENGTH_SHORT).show();
+
+                                            dateTextView.setVisibility(View.INVISIBLE);
+                                            date2TextView.setVisibility(View.INVISIBLE);
+                                            recordListView.setVisibility(View.INVISIBLE);
+                                            presentTextView.setVisibility(View.INVISIBLE);
+                                            absentTextView.setVisibility(View.INVISIBLE);
 //                                            textView.setText("");
                                         }
                                         else {
