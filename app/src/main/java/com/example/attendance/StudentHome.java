@@ -3,7 +3,9 @@ package com.example.attendance;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -203,6 +205,45 @@ public class StudentHome extends AppCompatActivity {
                 //Log.i("id", id);
                 intent.putExtra("id", id);
                 startActivity(intent);
+            }
+        });
+
+        courseListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int pos, long l) {
+
+                final String courseIdToBeDeleted = courseId.get(pos);
+
+                new AlertDialog.Builder(StudentHome.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Are you sure?")
+                        .setMessage("All the attendance record of this course will be erased. Do you want to delete this course?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                DatabaseReference databaseAttendance = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseIdToBeDeleted).child(studentID);
+                                databaseAttendance.removeValue();
+                                student.getCourseId().remove(courseIdToBeDeleted);
+                                courseId.remove(courseIdToBeDeleted);
+                                courseList.remove(pos);
+                                arrayAdapter.notifyDataSetChanged();
+
+                                DatabaseReference databaseStudent = FirebaseDatabase.getInstance().getReference("STUDENT").child(studentID);
+                                databaseStudent.setValue(student);
+
+                                Toast.makeText(StudentHome.this, "Course deleted successfully!", Toast.LENGTH_SHORT).show();
+                                /*Intent intent = new Intent(getApplicationContext(), StudentHome.class);
+                                intent.putExtra("id", studentID);
+                                startActivity(intent);*/
+
+
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+                return true;
             }
         });
     }
