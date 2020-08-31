@@ -199,6 +199,100 @@ public class StudentCourse extends AppCompatActivity {
                     if(tempCourse != null && tempCourse.getCourseId().equals(courseId)) {
 
                         currCourse = tempCourse;
+
+                        databaseAttendace = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseId);
+                        databaseAttendace.addListenerForSingleValueEvent(new ValueEventListener() { // fetching previous attendance record of that course of the student
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                    ATTENANCE_RECORD temp = dataSnapshot.getValue(ATTENANCE_RECORD.class);
+
+                                    if (temp != null && temp.getStudentID().equals(StudentHome.studentID)) { // got the desired attendance record
+
+                                        attenance_record = temp;
+
+                                        for(int i = 1; i < attenance_record.getPresentDates().size(); i++) { // checking if the attendance is already marked
+
+                                            if(attenance_record.getPresentDates().get(i).equals(currCourse.getCurrentDate())) { // attendance is marked
+                                                qrCode = "Your attendance is already marked!";
+                                                check = true;
+                                            }
+                                        }
+
+                                        if(check == false) {
+
+                                            if(currCourse.getQRCode().equals(qrCode) == false) { // QR-Code does not match
+                                                qrCode = "Invalid qrCode!";
+                                                check = true;
+                                                //intentIntegrator.initiateScan();
+                                            }
+                                            else {
+                                                locationListener = new LocationListener() { // fetching current location of the student
+                                                    @Override
+                                                    public void onLocationChanged(@NonNull Location location) {
+
+                                                        if(location != null)
+                                                            currLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                                    }
+                                                };
+
+                                                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                                                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+                                                    Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                                                    if(lastKnownLocation != null)
+                                                        lastKnowLocationLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                                                }
+                                                else {
+
+                                                    ActivityCompat.requestPermissions(StudentCourse.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                                                }
+
+                                                double lat = 0;
+                                                double lng = 0;
+
+                                                if(currLatLng.longitude != 0) {
+                                                    lat = currLatLng.latitude;
+                                                    lng = currLatLng.longitude;
+                                                }
+                                                else if(lastKnowLocationLatLng.longitude != 0) {
+                                                    lat = lastKnowLocationLatLng.latitude;
+                                                    lng = lastKnowLocationLatLng.longitude;
+                                                }
+
+                                                double dist = (course.getLat() - lat)*(course.getLat() - lat) + (course.getLng() - lng)*(course.getLng() - lng);
+
+                                                if(dist > 10.0) {
+                                                    qrCode = "Distance is far!";
+                                                    check = true;
+                                                }
+                                                else { // Attendance is marked
+                                                    qrCode = "Attendance Marked!";
+                                                    attenance_record.getPresentDates().add(currCourse.getCurrentDate());
+
+                                                    databaseAttendance2 = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseId).child(StudentHome.studentID);
+                                                    databaseAttendance2.setValue(attenance_record);
+
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                                Log.i("QR-Code", qrCode);
+                                Toast.makeText(StudentCourse.this, qrCode, Toast.LENGTH_LONG).show();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
                     }
                 }
             }
@@ -207,99 +301,6 @@ public class StudentCourse extends AppCompatActivity {
 
             }
         });
-
-
-        databaseAttendace = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseId);
-            databaseAttendace.addListenerForSingleValueEvent(new ValueEventListener() { // fetching previous attendance record of that course of the student
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                        ATTENANCE_RECORD temp = dataSnapshot.getValue(ATTENANCE_RECORD.class);
-
-                        if (temp != null && temp.getStudentID().equals(StudentHome.studentID)) { // got the desired attendance record
-
-                            attenance_record = temp;
-
-                            for(int i = 1; i < attenance_record.getPresentDates().size(); i++) { // checking if the attendance is already marked
-
-                                if(attenance_record.getPresentDates().get(i).equals(currCourse.getCurrentDate())) { // attendance is marked
-                                    qrCode = "Your attendance is already marked!";
-                                    check = true;
-                                }
-                            }
-
-                            if(check == false) {
-
-                                if(currCourse.getQRCode().equals(qrCode) == false) { // QR-Code does not match
-                                    qrCode = "Invalid qrCode!";
-                                    check = true;
-                                    //intentIntegrator.initiateScan();
-                                }
-                                else {
-                                    locationListener = new LocationListener() { // fetching current location of the student
-                                        @Override
-                                        public void onLocationChanged(@NonNull Location location) {
-
-                                            if(location != null)
-                                                currLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                        }
-                                    };
-
-                                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-                                        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                                        if(lastKnownLocation != null)
-                                            lastKnowLocationLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                                    }
-                                    else {
-
-                                        ActivityCompat.requestPermissions(StudentCourse.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                                    }
-
-                                    double lat = 0;
-                                    double lng = 0;
-
-                                    if(currLatLng.longitude != 0) {
-                                        lat = currLatLng.latitude;
-                                        lng = currLatLng.longitude;
-                                    }
-                                    else if(lastKnowLocationLatLng.longitude != 0) {
-                                        lat = lastKnowLocationLatLng.latitude;
-                                        lng = lastKnowLocationLatLng.longitude;
-                                    }
-
-                                    double dist = (course.getLat() - lat)*(course.getLat() - lat) + (course.getLng() - lng)*(course.getLng() - lng);
-
-                                    if(dist > 10.0) {
-                                        qrCode = "Distance is far!";
-                                        check = true;
-                                    }
-                                    else { // Attendance is marked
-                                        qrCode = "Attendance Marked!";
-                                        attenance_record.getPresentDates().add(currCourse.getCurrentDate());
-
-                                        databaseAttendance2 = FirebaseDatabase.getInstance().getReference("ATTENDANCE_RECORD").child(courseId).child(StudentHome.studentID);
-                                        databaseAttendance2.setValue(attenance_record);
-
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                    Log.i("QR-Code", qrCode);
-                    Toast.makeText(StudentCourse.this, qrCode, Toast.LENGTH_LONG).show();
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
 
         super.onActivityResult(requestCode, resultCode, data);
 
