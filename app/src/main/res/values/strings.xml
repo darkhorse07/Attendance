@@ -2,8 +2,7 @@
     <string name="app_name">MarkME</string>
     <string name="about_MarkME">
         &lt;font color="#df5e88"> MarkME &lt;/font> is an android based application developed primarily for students and faculty members.
-        It helps the faculty members to digitally mark the attendance and keep a track of previous records.
-        It lists out the students who have attendance below a certain number.
+        It helps the faculty members to digitally mark the attendance using a dynamic QR-Code, and keep a track of previous records.
         &lt;br>
         Students, on the other hand, can check out his/her attendance record through this application.
 
