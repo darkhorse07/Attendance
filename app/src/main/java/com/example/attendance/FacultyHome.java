@@ -108,7 +108,7 @@ public class FacultyHome extends AppCompatActivity {
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, courseList);
 
-        databaseTeacher.addValueEventListener(new ValueEventListener() {
+        databaseTeacher.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -119,61 +119,62 @@ public class FacultyHome extends AppCompatActivity {
                     if(tempTeacher != null && tempTeacher.getTeacherId().equals(teacherID)) {
                         teacher = tempTeacher;
                         welcomeTextView.setText("Welcome, " + teacher.getFirstName());
-                    }
 
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                        databaseCourse.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-            }
-        });
+                                courseList.clear();
 
-        databaseCourse.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                courseList.clear();
+                                    COURSE course = dataSnapshot.getValue(COURSE.class);
 
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    if (course != null) {
+                                        for (int i = 1; i < teacher.getCourseId().size(); i++) {
+                                            if (teacher.getCourseId().get(i).equals(course.getCourseId())) {
+                                                courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                                            }
+                                        }
+                                    }
 
-                    COURSE course = dataSnapshot.getValue(COURSE.class);
+                                    arrayAdapter.notifyDataSetChanged();
 
-                    if (course != null) {
-                        for (int i = 1; i < teacher.getCourseId().size(); i++) {
-                            if (teacher.getCourseId().get(i).equals(course.getCourseId())) {
-                                courseList.add(course.getCourseName() + " (" + course.getBatch() + ")");
+                                }
+                                progressBar.setVisibility(View.INVISIBLE);
+                                courseListView.setVisibility(View.VISIBLE);
+                                welcomeTextView.setVisibility(View.VISIBLE);
                             }
-                        }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                        courseListView.setAdapter(arrayAdapter);
+
+
+                        courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                String id = teacher.getCourseId().get(i + 1);
+                                Intent intent = new Intent(getApplicationContext(), FacultyCourse.class);
+                                Log.i("id", id);
+                                intent.putExtra("id", id);
+                                startActivity(intent);
+
+                            }
+                        });
+
                     }
 
-                    arrayAdapter.notifyDataSetChanged();
-
                 }
-                progressBar.setVisibility(View.INVISIBLE);
-                courseListView.setVisibility(View.VISIBLE);
-                welcomeTextView.setVisibility(View.VISIBLE);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        courseListView.setAdapter(arrayAdapter);
-
-
-        courseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                String id = teacher.getCourseId().get(i + 1);
-                Intent intent = new Intent(getApplicationContext(), FacultyCourse.class);
-                Log.i("id", id);
-                intent.putExtra("id", id);
-                startActivity(intent);
 
             }
         });
