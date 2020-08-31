@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Login extends AppCompatActivity {
 
     int code;
+    int flag = 0;
 
     EditText emailTextView;
     EditText passwordTextView;
@@ -34,10 +35,14 @@ public class Login extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    DatabaseReference databaseStudent;
+    DatabaseReference databaseTeacher;
+
     public void login(View view) {
 
         final String email = emailTextView.getText().toString();
-        String password = passwordTextView.getText().toString();
+        final String password = passwordTextView.getText().toString();
+        flag = 0;
 
         if (email.isEmpty()) {
             emailTextView.setError("Email is required!");
@@ -65,36 +70,86 @@ public class Login extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        databaseTeacher = FirebaseDatabase.getInstance().getReference("TEACHER");
+        databaseTeacher.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    TEACHER teacher = dataSnapshot.getValue(TEACHER.class);
+                    if(teacher != null) {
+                        if(teacher.getEmail().equals(email) && code == 1)
+                            flag = 1;
+                    }
+                }
+
+                databaseStudent = FirebaseDatabase.getInstance().getReference("STUDENT");
+                databaseStudent.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        progressBar.setVisibility(View.INVISIBLE);
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                        if (task.isSuccessful()) {
-
-                            Intent intent;
-                            finish();
-                            if (code == 1) {
-                                intent = new Intent(getApplicationContext(), StudentHome.class);
-                            } else {
-                                intent = new Intent(getApplicationContext(), FacultyHome.class);
+                            STUDENT student = dataSnapshot.getValue(STUDENT.class);
+                            if(student != null) {
+                                if(student.getEmail().equals(email) && code == 2)
+                                    flag = 1;
                             }
-
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("id", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            Log.i("Starting", email);
-                            Toast.makeText(Login.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                            startActivity(intent);
-
                         }
-                        else {
-                            Toast.makeText(Login.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
                 });
+
+
+                if(flag == 1) {
+                    Toast.makeText(Login.this, "Invalid credentials!", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                    if (task.isSuccessful()) {
+
+                                        Intent intent;
+                                        finish();
+                                        if (code == 1) {
+                                            intent = new Intent(getApplicationContext(), StudentHome.class);
+                                        } else {
+                                            intent = new Intent(getApplicationContext(), FacultyHome.class);
+                                        }
+
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        intent.putExtra("id", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                        Log.i("Starting", email);
+                                        Toast.makeText(Login.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                                        startActivity(intent);
+                                    }
+                                    else {
+                                        Toast.makeText(Login.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    }
+                                }
+                            });
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public void signup(View view) {
